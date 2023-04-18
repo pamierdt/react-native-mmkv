@@ -1,6 +1,7 @@
 require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
+use_hermes = ENV['USE_HERMES'] == '1'
 
 Pod::Spec.new do |s|
   s.name         = "react-native-mmkv"
@@ -26,7 +27,13 @@ Pod::Spec.new do |s|
   s.preserve_paths = [
     'ios/**/*.h'
   ]
-
+  
+  if use_hermes
+    s.dependency 'React-hermes'
+    s.dependency 'hermes-engine'
+  else
+    s.dependency 'React-jsc'
+  end
   s.dependency "MMKV", ">= 1.2.13"
   s.dependency "React-Core"
 end
